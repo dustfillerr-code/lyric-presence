@@ -1,0 +1,19 @@
+{
+  "name": "lyric-presence",
+  "version": "0.1.0",
+  "description": "Show the current line of the song you're playing on Spotify as a Discord Rich Presence activity.",
+  "main": "src/main.js",
+  "author": "",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev"
+  },
+  "dependencies": {
+    "@xhayper/discord-rpc": "^1.2.0",
+    "electron-store": "^8.2.0"
+  },
+  "devDependencies": {
+    "electron": "^43.1.1"
+  }
+}

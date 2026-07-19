@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lyric Presence — Settings</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Lyric Presence</h1>
+    <p class="status" id="status">Idle</p>
+  </header>
+
+  <main>
+    <section>
+      <h2>1 · Spotify</h2>
+      <p class="hint">
+        Create an app at the
+        <a href="#" data-ext="https://developer.spotify.com/dashboard">Spotify Developer Dashboard</a>,
+        add the redirect URI <code>http://127.0.0.1:8888/callback</code>, then paste the Client ID below.
+      </p>
+      <label>Spotify Client ID
+        <input id="spotifyClientId" type="text" spellcheck="false" placeholder="e.g. 4a1b…" />
+      </label>
+      <div class="row">
+        <button id="connectSpotify" class="secondary">Connect Spotify…</button>
+        <span id="spotifyState" class="pill">not connected</span>
+      </div>
+    </section>
+
+    <section>
+      <h2>2 · Discord</h2>
+      <p class="hint">
+        Create an application at the
+        <a href="#" data-ext="https://discord.com/developers/applications">Discord Developer Portal</a>
+        and paste its <b>Application ID</b>. The Discord desktop app must be running.
+        Its name becomes the “Listening to …” label.
+      </p>
+      <label>Discord Application ID
+        <input id="discordClientId" type="text" spellcheck="false" placeholder="e.g. 12345678901234567" />
+      </label>
+    </section>
+
+    <section>
+      <h2>3 · Display</h2>
+      <label>Line 1 (details) template
+        <input id="detailsTemplate" type="text" spellcheck="false" />
+      </label>
+      <label>Line 2 (state) template
+        <input id="stateTemplate" type="text" spellcheck="false" />
+      </label>
+      <p class="hint">Placeholders: <code>{line}</code> (current lyric), <code>{track}</code>, <code>{artist}</code>.</p>
+      <label>Activity image (URL or uploaded Discord asset key)
+        <input id="largeImageKey" type="text" spellcheck="false" placeholder="https://…/pfp.png" />
+      </label>
+      <label>Image hover text
+        <input id="largeImageText" type="text" spellcheck="false" placeholder="{line}" />
+      </label>
+      <p class="hint">
+        A public image URL (Discord proxies it) or an asset key uploaded under your
+        Discord app → Rich Presence → Art Assets. Defaults to <code>assets/pfp.png</code>
+        from the repo once pushed. Save your pfp there as <code>pfp.png</code>.
+      </p>
+      <label class="check"><input id="showTrackWhenNoLyrics" type="checkbox" /> Show track name when no synced lyrics exist</label>
+      <label class="check"><input id="idleClearsActivity" type="checkbox" /> Clear activity when nothing is playing</label>
+    </section>
+  </main>
+
+  <footer>
+    <button id="save" class="secondary">Save</button>
+    <button id="toggleRun" class="primary">Start</button>
+  </footer>
+
+  <script src="settings.js"></script>
+</body>
+</html>
