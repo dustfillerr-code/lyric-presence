@@ -1,7 +1,8 @@
 // Anonymous random-chat Telegram bot, running as a Supabase Edge Function.
 //
-// Required secret: TELEGRAM_BOT_TOKEN (from @BotFather).
-// SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are provided by Supabase.
+// Bot token (from @BotFather): the TELEGRAM_BOT_TOKEN secret, or else the
+// 'bot_token' row in public.tg_config. SUPABASE_URL and
+// SUPABASE_SERVICE_ROLE_KEY are provided by Supabase.
 //
 // One-time setup: open  <function-url>?setup=1  in a browser. That registers
 // this function as the bot's webhook and sets the command menu.
@@ -9,11 +10,18 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 
-const BOT_TOKEN = Deno.env.get("TELEGRAM_BOT_TOKEN") ?? "";
 const db = createClient(
   Deno.env.get("SUPABASE_URL")!,
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
 );
+
+let BOT_TOKEN = Deno.env.get("TELEGRAM_BOT_TOKEN") ?? "";
+
+async function loadToken() {
+  if (BOT_TOKEN) return;
+  const { data } = await db.from("tg_config").select("value").eq("key", "bot_token").maybeSingle();
+  BOT_TOKEN = data?.value ?? "";
+}
 
 const WELCOME = `👋 Welcome to Anonymous Chat!
 
@@ -181,8 +189,9 @@ async function setup() {
 }
 
 Deno.serve(async (req) => {
+  await loadToken();
   if (!BOT_TOKEN) {
-    return new Response("TELEGRAM_BOT_TOKEN secret is not set", { status: 500 });
+    return new Response("Bot token is not configured", { status: 500 });
   }
 
   if (req.method === "GET") {

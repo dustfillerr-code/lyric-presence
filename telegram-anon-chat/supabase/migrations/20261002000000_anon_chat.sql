@@ -26,9 +26,16 @@ create table public.tg_reports (
 
 create index tg_reports_reported_idx on public.tg_reports (reported);
 
+-- Optional config (e.g. key 'bot_token') when not using an Edge Function secret.
+create table public.tg_config (
+  key   text primary key,
+  value text not null
+);
+
 alter table public.tg_users   enable row level security;
 alter table public.tg_reports enable row level security;
-revoke all on public.tg_users, public.tg_reports from anon, authenticated;
+alter table public.tg_config  enable row level security;
+revoke all on public.tg_users, public.tg_reports, public.tg_config from anon, authenticated;
 
 -- Put a user in the queue, or pair them with the longest-waiting user.
 -- Returns the partner's chat_id, or null if now waiting.
